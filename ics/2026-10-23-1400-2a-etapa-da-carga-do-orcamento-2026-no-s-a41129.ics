@@ -1,0 +1,32 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//CGIBS//Agenda DITES//PT-BR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:a41129cc5f2fa34cf7923664409f70ef5c6205cc@agenda-dites
+DTSTAMP:20261022T190000Z
+DTSTART:20261023T170000Z
+DTEND:20261023T190000Z
+SUMMARY:2ª Etapa da carga do Orçamento 2026 no Sigef (operação assistid
+ a com a Indra)
+DESCRIPTION:Link da reunião: https://teams.microsoft.com/l/meetup-join/19%
+ 3ameeting_NmU5ZmFlMzQtNzVmYi00YWNkLTkxM2EtNTMzNmY3NjBiZjhl%40thread.v2/0?c
+ ontext=%7b%22Tid%22%3a%227808e005-1489-4374-954b-d3b08f193920%22%2c%22Oid%
+ 22%3a%22ea8ba6d5-eda5-4a3e-8e62-f5be3929e335%22%7d\nAgenda de reuniões 
+ — Diretoria de Tesouraria | CGIBS
+LOCATION:https://teams.microsoft.com/l/meetup-join/19%3ameeting_NmU5ZmFlMzQ
+ tNzVmYi00YWNkLTkxM2EtNTMzNmY3NjBiZjhl%40thread.v2/0?context=%7b%22Tid%22%3
+ a%227808e005-1489-4374-954b-d3b08f193920%22%2c%22Oid%22%3a%22ea8ba6d5-eda5
+ -4a3e-8e62-f5be3929e335%22%7d
+URL:https://teams.microsoft.com/l/meetup-join/19%3ameeting_NmU5ZmFlMzQtNzVm
+ Yi00YWNkLTkxM2EtNTMzNmY3NjBiZjhl%40thread.v2/0?context=%7b%22Tid%22%3a%227
+ 808e005-1489-4374-954b-d3b08f193920%22%2c%22Oid%22%3a%22ea8ba6d5-eda5-4a3e
+ -8e62-f5be3929e335%22%7d
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Lembrete
+TRIGGER:-PT15M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
