@@ -5,11 +5,11 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:7ce7a21eb44e68e97c1e0d50a919d2deb1ad2a79@agenda-dites
-DTSTAMP:20261023T190000Z
+DTSTAMP:20261023T191100Z
 DTSTART:20261026T170000Z
 DTEND:20261026T180000Z
 SUMMARY:Reunião conjunta Diretoria de Tesouraria e de TI - Alinhamento SIG
- EF - DITES
+ EF
 DESCRIPTION:Link da reunião: https://teams.microsoft.com/meet/274456005512
  2910?p=QA1h5sFtkWcXRjCAFJ\nAgenda de reuniões — Diretoria de Tesouraria
   | CGIBS
