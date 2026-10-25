@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="agenda-versao" content="0cdb464de04c">
 <title>Agenda DITES · CGIBS</title>
 <meta name="description" content="Agenda de reuniões da Diretoria de Tesouraria do CGIBS.">
 <meta name="application-name" content="Agenda DITES">
@@ -55,16 +56,18 @@ main{flex:1;width:100%;max-width:1040px;margin:0 auto;padding:44px 24px 64px;dis
 .dica{margin:-16px 0 0;font-size:14px;color:var(--texto)}
 #barra{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--marinho);border-top:4px solid var(--verde);color:#fff;box-shadow:0 -6px 20px rgba(0,18,56,.18)}
 #barra[hidden],.txt[hidden]{display:none}
-#barra .in{max-width:1040px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
+#barra .in{max-width:1040px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px}
 #qtd{flex:1;font-size:15px}
 #barra button{font:inherit;cursor:pointer;min-height:44px}
 #barra .txt{background:none;border:0;color:#D0DFFB;font-size:14px;padding:0 6px;text-decoration:underline}
 #barra .txt:hover{color:#fff}
+#barra #nova{flex-basis:100%;min-height:32px;padding:0;text-align:left;color:var(--verde);font-weight:500}
 #barra .incluir{border:0;border-radius:999px;background:var(--verde);color:var(--marinho);font-size:15px;font-weight:600;padding:0 20px;display:flex;align-items:center;gap:8px}
 #barra .incluir{white-space:nowrap}
 #barra .incluir svg{flex-shrink:0}
 #barra .incluir:hover{background:#21e0a2}
 body.com-barra{padding-bottom:84px}
+body.com-barra.com-aviso{padding-bottom:120px}
 footer{background:var(--marinho);border-top:4px solid var(--verde);color:#D0DFFB;font-size:13px}
 footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-content:space-between;gap:12px}
 @media (max-width:720px){
@@ -87,6 +90,7 @@ footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-cont
   #barra .txt{padding:0 4px;font-size:13px}
   #barra .incluir{flex-basis:100%;justify-content:center}
   body.com-barra{padding-bottom:132px}
+  body.com-barra.com-aviso{padding-bottom:168px}
   .hora{width:auto;flex-direction:row;align-items:baseline;gap:8px}
   .ini{font-size:24px}
   .info h3{font-size:17px;line-height:1.3}
@@ -109,7 +113,7 @@ footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-cont
     </div>
     <div class="titulo">
       <h1>Agenda de reuniões</h1>
-      <span id="atualizado">Atualizado em 25/10 às 10:32 · horário de Brasília</span>
+      <span id="atualizado">Atualizado em 25/10 às 10:37 · horário de Brasília</span>
     </div>
   </div>
 </header>
@@ -123,6 +127,7 @@ footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-cont
 </main>
 <div id="barra" role="region" aria-label="Reuniões selecionadas" hidden>
   <div class="in">
+    <button type="button" class="txt" id="nova" hidden>A agenda foi atualizada. Ver a versão nova</button>
     <span id="qtd" aria-live="polite"></span>
     <button type="button" class="txt" id="todas">Selecionar todas</button>
     <button type="button" class="txt" id="limpar">Limpar</button>
@@ -134,9 +139,15 @@ footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-cont
 (function(){
   function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   var hoje = iso(new Date());
-  document.querySelectorAll(".dia").forEach(function(s){ if(s.dataset.dia < hoje) s.remove(); });
-  if(!document.querySelector(".dia")) document.getElementById("vazio").hidden = false;
-  if(!document.querySelector(".dia")) document.getElementById("dica").hidden = true;
+  function esconderPassados(){
+    var h = iso(new Date());
+    document.querySelectorAll(".dia").forEach(function(s){ if(s.dataset.dia < h) s.remove(); });
+    if(!document.querySelector(".dia")){
+      document.getElementById("vazio").hidden = false;
+      document.getElementById("dica").hidden = true;
+    }
+  }
+  esconderPassados();
 
   // seleção de várias reuniões -> um único arquivo .ics
   var barra = document.getElementById("barra"), qtd = document.getElementById("qtd"),
@@ -172,6 +183,33 @@ footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-cont
     .then(function(){ botao.disabled = false; });
   });
   atualizar();
+
+  // página aberta há muito tempo: ao voltar para a aba (e a cada 15 min com ela visível)
+  // busca a versão publicada; se mudou ou virou o dia, recarrega, ou avisa se houver reuniões marcadas
+  var versao = document.querySelector('meta[name="agenda-versao"]').content,
+      ultima = Date.now(), nova = document.getElementById("nova");
+  nova.addEventListener("click", function(){ location.reload(); });
+  function verificar(){
+    if(document.hidden) return;
+    ultima = Date.now();
+    fetch(location.pathname + "?v=" + Date.now(), {cache: "no-store"})
+    .then(function(r){ return r.ok ? r.text() : null; }, function(){ return null; })
+    .then(function(t){
+      var m = t && t.match(/name="agenda-versao" content="([^"]+)"/);
+      if(m && (m[1] !== versao || iso(new Date()) !== hoje)){
+        if(!marcadas().length){ location.reload(); return; }
+        nova.hidden = false;
+        document.body.classList.add("com-aviso");
+      } else {
+        esconderPassados();  // sem conexão: ao menos tira os dias que já passaram
+      }
+    });
+  }
+  document.addEventListener("visibilitychange", function(){
+    if(!document.hidden && Date.now() - ultima > 60000) verificar();
+  });
+  window.addEventListener("pageshow", function(e){ if(e.persisted) verificar(); });
+  setInterval(verificar, 15 * 60 * 1000);
 })();
 </script>
 </body>
