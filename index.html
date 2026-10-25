@@ -14,10 +14,10 @@
 <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap">
+<link rel="preload" href="rubik.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* Rubik servida junto do site (sem Google Fonts); licença em rubik-OFL.txt */
+@font-face{font-family:Rubik;src:url(rubik.woff2) format("woff2");font-weight:300 900;font-style:normal;font-display:swap}
 :root{--marinho:#06204F;--texto:#33475B;--cinza:#606060;--borda:#E3E5EC;--verde:#00cb8a}
 *{box-sizing:border-box}
 body{margin:0;font-family:Rubik,system-ui,-apple-system,"Segoe UI",sans-serif;background:#fff;color:var(--marinho);display:flex;flex-direction:column;min-height:100vh}
@@ -109,7 +109,7 @@ footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-cont
     </div>
     <div class="titulo">
       <h1>Agenda de reuniões</h1>
-      <span id="atualizado" data-gerado="2026-10-25T10:00">Atualizado às 10:00</span>
+      <span id="atualizado">Atualizado em 25/10 às 10:32 · horário de Brasília</span>
     </div>
   </div>
 </header>
@@ -136,8 +136,6 @@ footer div{max-width:1040px;margin:0 auto;padding:24px;display:flex;justify-cont
   var hoje = iso(new Date());
   document.querySelectorAll(".dia").forEach(function(s){ if(s.dataset.dia < hoje) s.remove(); });
   if(!document.querySelector(".dia")) document.getElementById("vazio").hidden = false;
-  var a = document.getElementById("atualizado"), g = a.dataset.gerado;
-  if(g && g.slice(0,10) !== hoje){ a.textContent = "Atualizado em " + g.slice(8,10) + "/" + g.slice(5,7) + " às " + g.slice(11,16); }
   if(!document.querySelector(".dia")) document.getElementById("dica").hidden = true;
 
   // seleção de várias reuniões -> um único arquivo .ics
